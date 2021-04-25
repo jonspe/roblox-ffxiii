@@ -26,7 +26,7 @@ local gaugeReducer = function(state, action)
     state = state or initialState
     if action.type == "COMBAT_TICK" then
         return {
-            currentGauge = math.min(state.barCount, state.currentGauge + action.increment),
+            currentGauge = state.currentGauge > state.barCount and 0 or state.currentGauge + action.increment,
             barCount = state.barCount
         }
     end
@@ -55,7 +55,7 @@ app = Roact.createElement(RoactRodux.StoreProvider, {
 local handle = Roact.mount(app, Players.LocalPlayer.PlayerGui, "Application")
 
 while true do
-    wait(0.2)
+    wait(0.4)
 
-    store:dispatch(combatTick(0.05))
+    store:dispatch(combatTick(0.1))
 end
