@@ -1,0 +1,12 @@
+[submodule "packages/Flipper"]
+	path = packages/Flipper
+	url = https://github.com/Reselim/Flipper
+[submodule "packages/Roact"]
+	path = packages/Roact
+	url = https://github.com/Roblox/roact
+[submodule "packages/Rodux"]
+	path = packages/Rodux
+	url = https://github.com/Roblox/rodux.git
+[submodule "packages/RoactRodux"]
+	path = packages/RoactRodux
+	url = https://github.com/Roblox/roact-rodux.git
