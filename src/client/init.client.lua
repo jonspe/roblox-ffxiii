@@ -14,7 +14,7 @@ local Roact = require(ReplicatedStorage.Packages.Roact)
 local Rodux = require(ReplicatedStorage.Packages.Rodux)
 local RoactRodux = require(ReplicatedStorage.Packages.RoactRodux)
 
-local GaugeBar = require(ReplicatedStorage.Components.GaugeBar)
+local GaugeMeter = require(ReplicatedStorage.Components.GaugeMeter)
 
 
 local initialState = {
@@ -43,7 +43,7 @@ end
 local store = Rodux.Store.new(gaugeReducer)
 
 local app = Roact.createElement("ScreenGui", {}, {
-    GaugeBar = Roact.createElement(GaugeBar)
+    GaugeMeter = Roact.createElement(GaugeMeter)
 })
 
 app = Roact.createElement(RoactRodux.StoreProvider, {
@@ -57,5 +57,5 @@ local handle = Roact.mount(app, Players.LocalPlayer.PlayerGui, "Application")
 while true do
     wait(0.4)
 
-    store:dispatch(combatTick(0.1))
+    store:dispatch(combatTick(math.random()))
 end
