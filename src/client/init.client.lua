@@ -1,12 +1,3 @@
---[[ print("Client started")
-
-while not game:IsLoaded() do
-	game.Loaded:Wait()
-end
-
-print("Client loaded")
-]]
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
@@ -19,7 +10,7 @@ local GaugeMeter = require(ReplicatedStorage.Components.GaugeMeter)
 
 local initialState = {
     currentGauge = 0,
-    barCount = 3
+    barCount = 4
 }
 
 local gaugeReducer = function(state, action)
@@ -55,7 +46,7 @@ app = Roact.createElement(RoactRodux.StoreProvider, {
 local handle = Roact.mount(app, Players.LocalPlayer.PlayerGui, "Application")
 
 while true do
-    wait(0.4)
+    wait(0.3)
 
-    store:dispatch(combatTick(math.random()))
+    store:dispatch(combatTick(math.random()*0.1+0.1))
 end

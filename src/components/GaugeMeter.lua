@@ -19,7 +19,8 @@ function GaugeMeter:render()
 
     return Roact.createElement("Frame", {
         Size = UDim2.new(0, barCount*182, 0, 20),
-        BackgroundColor3 = Color3.new(0.807843, 0.807843, 0.807843)
+        BorderSizePixel = 0,
+        BackgroundColor3 = Color3.new(0.450980, 0.584313, 0.627450)
     }, {
 
         Container = Roact.createElement("Frame", {
@@ -28,7 +29,8 @@ function GaugeMeter:render()
             BackgroundTransparency = 1,
         }, {
             Layout = Roact.createElement("UIListLayout", {
-                FillDirection = Enum.FillDirection.Horizontal
+                FillDirection = Enum.FillDirection.Horizontal,
+                Padding = UDim.new(0, 6)
             }),
             unpack(bars)
         })

@@ -6,27 +6,44 @@ local Flipper = require(ReplicatedStorage.Packages.Flipper)
 local GaugeBar = Roact.Component:extend("GaugeBar")
 
 function GaugeBar:init()
-	self.motor = Flipper.SingleMotor.new(0)
+    local gaugeBinding, setGaugeBinding = Roact.createBinding(0)
+    self.gaugeBinding = gaugeBinding
+    self.gaugeMotor = Flipper.SingleMotor.new(0)
+    self.gaugeMotor:onStep(setGaugeBinding)
 
-	local binding, setBinding = Roact.createBinding(self.motor:getValue())
-	self.binding = binding
-
-	self.motor:onStep(setBinding)
+    local fillerBinding, setFillerBinding = Roact.createBinding(0)
+    self.fillerBinding = fillerBinding
+    self.fillerMotor = Flipper.SingleMotor.new(0)
+    self.fillerMotor:onStep(setFillerBinding)
 end
 
 function GaugeBar:render()
     local gauge = self.props.gauge
 
-    self.motor:setGoal(Flipper.Spring.new(gauge), {
-        frequency = 1,
-        dampingRatio = 0.75
-    })
+    self.gaugeMotor:setGoal(Flipper.Spring.new(gauge))
+
+    if gauge < 1 then
+        self.fillerMotor:setGoal(Flipper.Spring.new(0))
+    else
+        self.fillerMotor:setGoal(Flipper.Spring.new(1))
+    end
 
     return Roact.createElement("Frame", {
-        Size = self.binding:map(function(value)
+        Size = self.gaugeBinding:map(function(value)
             return UDim2.new(value, 0, 1, 0)
         end),
-        BackgroundColor3 = Color3.new(0.203921, 0.839215, 1)
+        BorderSizePixel = 0,
+        BackgroundColor3 = Color3.new(0.427450, 0.886274, 1)
+    }, {
+        Roact.createElement("Frame", {
+            Size = self.fillerBinding:map(function(value)
+                return UDim2.new(1, 0, value*2, 0)
+            end),
+            BorderSizePixel = 0,
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = Color3.new(1, 1, 1)
+        })
     })
 end
 
