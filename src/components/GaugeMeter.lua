@@ -7,6 +7,8 @@ local GaugeBar = require(ReplicatedStorage.Components.GaugeBar)
 local GaugeMeter = Roact.Component:extend("GaugeMeter")
 
 function GaugeMeter:render()
+    print(self.props)
+
     local currentGauge = self.props.currentGauge
     local barCount = self.props.barCount
     

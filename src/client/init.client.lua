@@ -7,46 +7,38 @@ local RoactRodux = require(ReplicatedStorage.Packages.RoactRodux)
 
 local GaugeMeter = require(ReplicatedStorage.Components.GaugeMeter)
 
+local CombatGaugeTick = function(increment)
+    return {
+        type = "CombatGaugeTick",
+        increment = increment
+    }
+end
 
-local initialState = {
+local gaugeReducer = Rodux.createReducer({
     currentGauge = 0,
     barCount = 4
-}
-
-local gaugeReducer = function(state, action)
-    state = state or initialState
-    if action.type == "COMBAT_TICK" then
+}, {
+    CombatGaugeTick = function(state, action)
         return {
             currentGauge = state.currentGauge > state.barCount and 0 or state.currentGauge + action.increment,
             barCount = state.barCount
         }
     end
-    return state
-end
-
-local combatTick = function(increment)
-    return {
-        type = "COMBAT_TICK",
-        increment = increment
-    }
-end
+})
 
 local store = Rodux.Store.new(gaugeReducer)
 
-local app = Roact.createElement("ScreenGui", {}, {
-    GaugeMeter = Roact.createElement(GaugeMeter)
-})
-
-app = Roact.createElement(RoactRodux.StoreProvider, {
+local app = Roact.createElement(RoactRodux.StoreProvider, {
     store = store,
 }, {
-    Main = app,
+    Main = Roact.createElement("ScreenGui", {}, {
+        GaugeMeter = Roact.createElement(GaugeMeter)
+    }),
 })
 
 local handle = Roact.mount(app, Players.LocalPlayer.PlayerGui, "Application")
 
 while true do
     wait(0.3)
-
-    store:dispatch(combatTick(math.random()*0.1+0.1))
+    store:dispatch(CombatGaugeTick(0.17))
 end
