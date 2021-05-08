@@ -33,7 +33,7 @@ function GaugeBar:render()
             return UDim2.new(value, 0, 1, 0)
         end),
         BorderSizePixel = 0,
-        BackgroundColor3 = Color3.new(0.427450, 0.886274, 1)
+        BackgroundColor3 = Color3.fromRGB(109, 226, 255)
     }, {
         Roact.createElement("Frame", {
             Size = self.fillerBinding:map(function(value)

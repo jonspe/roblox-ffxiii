@@ -7,8 +7,6 @@ local GaugeBar = require(ReplicatedStorage.Components.GaugeBar)
 local GaugeMeter = Roact.Component:extend("GaugeMeter")
 
 function GaugeMeter:render()
-    print(self.props)
-
     local currentGauge = self.props.currentGauge
     local barCount = self.props.barCount
     
@@ -22,9 +20,8 @@ function GaugeMeter:render()
     return Roact.createElement("Frame", {
         Size = UDim2.new(0, barCount*182, 0, 20),
         BorderSizePixel = 0,
-        BackgroundColor3 = Color3.new(0.450980, 0.584313, 0.627450)
+        BackgroundColor3 = Color3.fromRGB(115, 149, 160)
     }, {
-
         Container = Roact.createElement("Frame", {
             Size =  UDim2.new(1/barCount, -8, 1, -8),
             Position = UDim2.new(0, 4, 0, 4),
