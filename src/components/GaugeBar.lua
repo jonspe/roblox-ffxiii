@@ -21,12 +21,7 @@ function GaugeBar:render()
     local gauge = self.props.gauge
 
     self.gaugeMotor:setGoal(Flipper.Spring.new(gauge))
-
-    if gauge < 1 then
-        self.fillerMotor:setGoal(Flipper.Spring.new(0))
-    else
-        self.fillerMotor:setGoal(Flipper.Spring.new(1))
-    end
+    self.fillerMotor:setGoal(Flipper.Spring.new(gauge < 1 and 0 or 1))
 
     return Roact.createElement("Frame", {
         Size = self.gaugeBinding:map(function(value)

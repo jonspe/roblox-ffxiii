@@ -28,7 +28,7 @@ end
 local gaugeReducer = Rodux.createReducer({
     currentGauge = 0,
     barCount = 4,
-    queue = {}
+    actionQueue = {}
 }, {
     CombatGaugeTick = function(state, action)
         return Util.combine(state, {
@@ -36,21 +36,21 @@ local gaugeReducer = Rodux.createReducer({
         })
     end,
     QueueCombatAction = function(state, action)
-        local count = Util.reduce(state.queue, function(a, b) return a + b.size end, 0)
-        local newQueue = Util.copy(state.queue)
-        local action = action.action
+        local count = Util.reduce(state.actionQueue, function(a, b) return a + b.size end, 0)
+        local newQueue = Util.copy(state.actionQueue)
+        action = action.action
 
         if count + action.size <= state.barCount then
             table.insert(newQueue, action)
         end
 
         return Util.combine(state, {
-            queue = newQueue
+            actionQueue = newQueue
         })
     end
 })
 
-local store = Rodux.Store.new(gaugeReducer, nil, { Rodux.loggerMiddleware })
+local store = Rodux.Store.new(gaugeReducer)
 
 local app = Roact.createElement(RoactRodux.StoreProvider, {
     store = store,
