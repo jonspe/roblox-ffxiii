@@ -20,9 +20,12 @@ function GaugeMeter:render()
     end
 
     local actions = {}
-    for i, v in ipairs(actionQueue) do
-        actions[i] = Roact.createElement(GaugeAction, {
-            action = v
+    local cumulativeGauge = 0
+    for index, action in ipairs(actionQueue) do
+        cumulativeGauge = cumulativeGauge + action.size
+        actions[index] = Roact.createElement(GaugeAction, {
+            action = action,
+            filled = currentGauge >= cumulativeGauge
         })
     end
 
@@ -32,17 +35,6 @@ function GaugeMeter:render()
         BorderSizePixel = 0,
         BackgroundColor3 = Color3.fromRGB(115, 149, 160)
     }, {
-        ActionContainer = Roact.createElement("Frame", {
-            Size =  UDim2.new(1/barCount, -8, 1, 0),
-            Position = UDim2.new(0, 4, 0, -32),
-            BackgroundTransparency = 1,
-        }, {
-            Layout = Roact.createElement("UIListLayout", {
-                FillDirection = Enum.FillDirection.Horizontal,
-                Padding = UDim.new(0, 6)
-            }),
-            unpack(actions)
-        }),
         BarContainer = Roact.createElement("Frame", {
             Size =  UDim2.new(1/barCount, -8, 1, -8),
             Position = UDim2.new(0, 4, 0, 4),
@@ -53,6 +45,17 @@ function GaugeMeter:render()
                 Padding = UDim.new(0, 6)
             }),
             unpack(bars)
+        }),
+        ActionContainer = Roact.createElement("Frame", {
+            Size =  UDim2.new(1/barCount, -8, 1, 0),
+            Position = UDim2.new(0, 4, 0, -32),
+            BackgroundTransparency = 1,
+        }, {
+            Layout = Roact.createElement("UIListLayout", {
+                FillDirection = Enum.FillDirection.Horizontal,
+                Padding = UDim.new(0, 6)
+            }),
+            unpack(actions)
         })
     })
 end
