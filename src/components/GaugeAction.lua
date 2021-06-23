@@ -22,7 +22,7 @@ function GaugeAction:render()
     end)
     
     return Roact.createElement("Frame", {
-        Size = UDim2.new(action.size, 0, 2, -16),
+        Size = UDim2.new(action.size, (action.size-1)*6, 2, -16),
         BackgroundTransparency = 1,
     }, {
         Roact.createElement("TextLabel", {
