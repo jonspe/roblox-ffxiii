@@ -5,12 +5,11 @@ local RoactRodux = require(ReplicatedStorage.Packages.RoactRodux)
 
 local GaugeBar = require(ReplicatedStorage.Components.GaugeBar)
 local GaugeAction = require(ReplicatedStorage.Components.GaugeAction)
-local GaugeMeter = Roact.Component:extend("GaugeMeter")
 
-function GaugeMeter:render()
-    local currentGauge = self.props.currentGauge
-    local barCount = self.props.barCount
-    local actionQueue = self.props.actionQueue
+local function GaugeMeter(props)
+    local currentGauge = props.currentGauge
+    local barCount = props.barCount
+    local actionQueue = props.actionQueue
 
     local bars = {}
     for i = 1, barCount do

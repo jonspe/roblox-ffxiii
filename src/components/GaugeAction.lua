@@ -1,32 +1,21 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Packages.Roact)
-local Flipper = require(ReplicatedStorage.Packages.Flipper)
+local Hooks = require(ReplicatedStorage.Packages.Hooks)
+local RoactFlipper = require(ReplicatedStorage.Packages.RoactFlipper)
 
-local GaugeAction = Roact.Component:extend("GaugeAction")
+local function GaugeAction(props, hooks)
+    local action = props.action
+    local filled = props.filled
 
-function GaugeAction:init()
-    local binding, setBinding = Roact.createBinding(0)
-    self.binding = binding
-    self.motor = Flipper.SingleMotor.new(0)
-    self.motor:onStep(setBinding)
-end
-
-function GaugeAction:render()
-    local action = self.props.action
-    local filled = self.props.filled
-
-    spawn(function()
-        wait(0.2)
-        self.motor:setGoal(Flipper.Spring.new(filled and 1 or 0))
-    end)
+    local motorBinding = RoactFlipper.useSpring(filled and 1 or 0, {}, hooks)
     
     return Roact.createElement("Frame", {
         Size = UDim2.new(action.size, (action.size-1)*6, 2, -16),
         BackgroundTransparency = 1,
     }, {
         Roact.createElement("TextLabel", {
-            Position = self.binding:map(function(value)
+            Position = motorBinding:map(function(value)
                 return UDim2.new(0, 0, 0, math.ceil(value * 30))
             end),
             Size = UDim2.new(1, 0, 1, 0),
@@ -41,4 +30,4 @@ function GaugeAction:render()
     })
 end
 
-return GaugeAction
+return Hooks.new(Roact)(GaugeAction)
