@@ -1,37 +1,24 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Hooks = require(ReplicatedStorage.Packages.Hooks)
 local Roact = require(ReplicatedStorage.Packages.Roact)
-local Flipper = require(ReplicatedStorage.Packages.Flipper)
+local RoactFlipper = require(ReplicatedStorage.Packages.RoactFlipper)
 
-local GaugeBar = Roact.Component:extend("GaugeBar")
+local function GaugeBar(props, hooks)
+    local gauge = props.gauge
 
-function GaugeBar:init()
-    local gaugeBinding, setGaugeBinding = Roact.createBinding(0)
-    self.gaugeBinding = gaugeBinding
-    self.gaugeMotor = Flipper.SingleMotor.new(0)
-    self.gaugeMotor:onStep(setGaugeBinding)
-
-    local fillerBinding, setFillerBinding = Roact.createBinding(0)
-    self.fillerBinding = fillerBinding
-    self.fillerMotor = Flipper.SingleMotor.new(0)
-    self.fillerMotor:onStep(setFillerBinding)
-end
-
-function GaugeBar:render()
-    local gauge = self.props.gauge
-
-    self.gaugeMotor:setGoal(Flipper.Spring.new(gauge))
-    self.fillerMotor:setGoal(Flipper.Spring.new(gauge < 1 and 0 or 1))
+    local gaugeBinding = RoactFlipper.useSpring(gauge, {}, hooks)
+    local fillerBinding = RoactFlipper.useSpring(gauge < 1 and 0 or 1, {}, hooks)
 
     return Roact.createElement("Frame", {
-        Size = self.gaugeBinding:map(function(value)
+        Size = gaugeBinding:map(function(value)
             return UDim2.new(value, 0, 1, 0)
         end),
         BorderSizePixel = 0,
         BackgroundColor3 = Color3.fromRGB(109, 226, 255)
     }, {
         Roact.createElement("Frame", {
-            Size = self.fillerBinding:map(function(value)
+            Size = fillerBinding:map(function(value)
                 return UDim2.new(1, 0, value*2, 0)
             end),
             BorderSizePixel = 0,
@@ -42,4 +29,4 @@ function GaugeBar:render()
     })
 end
 
-return GaugeBar
+return Hooks.new(Roact)(GaugeBar)
