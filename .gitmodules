@@ -13,3 +13,6 @@
 [submodule "packages/RoactFlipper"]
 	path = packages/RoactFlipper
 	url = git@github.com:Reselim/roact-flipper.git
+[submodule "packages/Hooks"]
+	path = packages/Hooks
+	url = git@github.com:Kampfkarren/roact-hooks.git
