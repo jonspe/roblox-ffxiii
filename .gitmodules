@@ -10,3 +10,6 @@
 [submodule "packages/RoactRodux"]
 	path = packages/RoactRodux
 	url = https://github.com/Roblox/roact-rodux.git
+[submodule "packages/RoactFlipper"]
+	path = packages/RoactFlipper
+	url = git@github.com:Reselim/roact-flipper.git
